@@ -1,5 +1,87 @@
 
+  //==================================================
+  // COLLABORATION TEST SCENARIO
+  //
+  // Please reference the Collaboration Scenario for a detailed description of the testing scenario
+  // https://github.com/clinical-meteor/collaborations/blob/master/docs/Collaboration%20Scenario.PNG
+  //
+  // Kutner should have access to:
+  //   Studies
+  //     Carcinoma Study
+  //     Sarcoma Study
+  //     Neuroblastoma Study
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Carcinoma Followup
+  //     Carcinoma RNA Seq
+  //     Sarcoma Followup
+  //     Sarcoma Laser Disection
+  //     Neuroblastoma Intake
+  //     Neuroblastoma RNA Seq
+  //     Neuroblatoma Followup
+  //     Patient Satisfaction
+  //
+  // Thirteen should have access to:
+  //   Studies
+  //     Neuroblastoma Study
+  //   Questionnaires
+  //     Neuroblastoma Intake
+  //     Neuroblastoma RNA Seq
+  //     Neuroblatoma Followup
+  //
+  // Cuddy should have access to:
+  //   Studies
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Patient Satisfaction
+  //
+  // Wilson should have access to:
+  //   Studies
+  //     Melanoma Study
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Melanoma RNA Seq
+  //     Melanoma Followup
+  //     Patient Satisfaction
+  //
+  // Foreman should have access to:
+  //   Studies
+  //     Sarcoma Study
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Sarcoma Laser Dissection
+  //     Sarcoma Followup
+  //     Patient Satisfaction
+  //
+  // Chase should have access to:
+  //   Studies
+  //     Carcinoma Followup
+  //     Carcinoma RNA Seq
+  //     Sarcoma Laser Dissection
+  //     Sarcoma Followup
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Carcinoma Study
+  //     Sarcoma Study
+  //     Patient Satisfaction
+  //
+
+  // House should have access to:
+  //   Studies
+  //     Granuloma Study
+  //     Lymphoma Study
+  //     Patient Satisfaction
+  //   Questionnaires
+  //     Lymphoma Followup
+  //     Lymphoma Demographics
+  //     Granuloma Patient Intake
+  //     Granuloma Blood Labs
+  //     Granuloma Followup
+  //     Patient Satisfaction
+
+
 describe('clinical:collaborations - Publication/Subscription', function () {
+  var server = meteor();
   var app = meteor({flavor: "fiber"});
   var client = ddp(app, {flavor: "fiber"});
 
@@ -355,7 +437,7 @@ describe('clinical:collaborations - Publication/Subscription', function () {
   });
 
   it("Studies publication/subscription should filter by collaboration", function () {
-    return app.execute(function() {
+    return app.execute(function () {
       Meteor.publish("studies", function (studyId) {
         var associatedCollaborations = Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
         return Studies.findOne({
@@ -379,86 +461,86 @@ describe('clinical:collaborations - Publication/Subscription', function () {
     expect(Object.keys(posts).length).to.equal(2);
   });
 
-  // it("Studies publication/subscription should filter by collaboration", function () {
-  //   return server.wait(1000, 'until collaborations collection is available on server', function (){
-  //     // return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborators();
-  //
-  //     Meteor.publish("studies", function (studyId) {
-  //       var associatedCollaborations = Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
-  //       return Studies.findOne({
-  //         collaborations: {$in: associatedCollaborations}
-  //       });
-  //     });
-  //
-  //     return true;
-  //   }).then(function (){
-  //     return client.wait(1000, 'until collaborations loads on client', function (){
-  //       // var approvedStudies = Studies.find().map(function(record){
-  //       //   return record._id;
-  //       // });
-  //       return client.wait(1000, 'until collaborations loads on client', function (){
-  //         Meteor.subscribe("studies");
-  //       });
-  //
-  //       expect(Studies).to.exist;
-  //       var studies = Studies.find();
-  //       expect(studies.length).to.equal(7);
-  //
-  //       // // expected studies
-  //       // expect(approvedStudies).to.include("granuloma");
-  //       // expect(approvedStudies).to.include("lymphoma");
-  //       // expect(approvedStudies).to.include("satisfaction");
-  //       //
-  //       // // denied studies
-  //       // expect(approvedStudies).to.not.include("sarcoma");
-  //       // expect(approvedStudies).to.not.include("melanoma");
-  //       // expect(approvedStudies).to.not.include("neuroblastoma");
-  //       // expect(approvedStudies).to.not.include("carcinoma");
-  //
-  //     });
-  //
-  //   });
-  // });
+  it("Studies publication/subscription should filter by collaboration", function () {
+    return server.wait(1000, 'until collaborations collection is available on server', function (){
+      // return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborators();
+
+      Meteor.publish("studies", function (studyId) {
+        var associatedCollaborations = Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
+        return Studies.findOne({
+          collaborations: {$in: associatedCollaborations}
+        });
+      });
+
+      return true;
+    }).then(function (){
+      return client.wait(1000, 'until collaborations loads on client', function (){
+        // var approvedStudies = Studies.find().map(function(record){
+        //   return record._id;
+        // });
+        return client.wait(1000, 'until collaborations loads on client', function (){
+          Meteor.subscribe("studies");
+        });
+
+        expect(Studies).to.exist;
+        var studies = Studies.find();
+        expect(studies.length).to.equal(7);
+
+        // // expected studies
+        // expect(approvedStudies).to.include("granuloma");
+        // expect(approvedStudies).to.include("lymphoma");
+        // expect(approvedStudies).to.include("satisfaction");
+        //
+        // // denied studies
+        // expect(approvedStudies).to.not.include("sarcoma");
+        // expect(approvedStudies).to.not.include("melanoma");
+        // expect(approvedStudies).to.not.include("neuroblastoma");
+        // expect(approvedStudies).to.not.include("carcinoma");
+
+      });
+
+    });
+  });
 
 
-  // it("Collaboration.getAssociatedCollaborators() - UCSF has associative collaboration with WCDT ", function () {
-  //   return server.wait(1000, 'until collaborations collection is available on server', function (){
-  //     return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborators();
-  //   }).then(function (collaborators){
-  //     expect(collaborators.length).to.equal(3);
-  //
-  //     // expected collaborators
-  //     expect(collaborators).to.include("cuddy@test.org");
-  //     expect(collaborators).to.include("house@test.org");
-  //     expect(collaborators).to.include("camron@test.org");
-  //
-  //     // denied collaborators
-  //     expect(collaborators).to.not.include("foreman@test.org");
-  //     expect(collaborators).to.not.include("wilson@test.org");
-  //     expect(collaborators).to.not.include("thirteen@test.org");
-  //     expect(collaborators).to.not.include("chase@test.org");
-  //     expect(collaborators).to.not.include("kutner@test.org");
-  //   });
-  // });
-  // it("Collaboration.getAssociatedCollaborations() - UCSF has associative collaboration with WCDT ", function () {
-  //   return server.wait(1000, 'until collaborations collection is available on server', function (){
-  //     return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborations();
-  //   }).then(function (collaborations){
-  //     expect(collaborations.length).to.equal(1);
-  //
-  //     // expected collaborators
-  //     expect(collaborations).to.include("wcdt");
-  //
-  //     // denied collaborators
-  //     expect(collaborations).to.not.include("ckcc");
-  //     expect(collaborations).to.not.include("ucla");
-  //     expect(collaborations).to.not.include("ucsc");
-  //     expect(collaborations).to.not.include("ucsf");
-  //     expect(collaborations).to.not.include("genomics");
-  //   });
-  // });
+  it("Collaboration.getAssociatedCollaborators() - UCSF has associative collaboration with WCDT ", function () {
+    return server.wait(1000, 'until collaborations collection is available on server', function (){
+      return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborators();
+    }).then(function (collaborators){
+      expect(collaborators.length).to.equal(3);
 
-  //------------------------------------------------------------------------
+      // expected collaborators
+      expect(collaborators).to.include("cuddy@test.org");
+      expect(collaborators).to.include("house@test.org");
+      expect(collaborators).to.include("camron@test.org");
+
+      // denied collaborators
+      expect(collaborators).to.not.include("foreman@test.org");
+      expect(collaborators).to.not.include("wilson@test.org");
+      expect(collaborators).to.not.include("thirteen@test.org");
+      expect(collaborators).to.not.include("chase@test.org");
+      expect(collaborators).to.not.include("kutner@test.org");
+    });
+  });
+  it("Collaboration.getAssociatedCollaborations() - UCSF has associative collaboration with WCDT ", function () {
+    return server.wait(1000, 'until collaborations collection is available on server', function (){
+      return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborations();
+    }).then(function (collaborations){
+      expect(collaborations.length).to.equal(1);
+
+      // expected collaborators
+      expect(collaborations).to.include("wcdt");
+
+      // denied collaborators
+      expect(collaborations).to.not.include("ckcc");
+      expect(collaborations).to.not.include("ucla");
+      expect(collaborations).to.not.include("ucsc");
+      expect(collaborations).to.not.include("ucsf");
+      expect(collaborations).to.not.include("genomics");
+    });
+  });
+
+  // ------------------------------------------------------------------------
   // Camron should have access to:
   //   Studies
   //     Granuloma Study
@@ -472,172 +554,89 @@ describe('clinical:collaborations - Publication/Subscription', function () {
   //     Granuloma Followup
   //     Patient Satisfaction
 
-  // it('User.getCollaborations() - Camron belongs to the "ucsf" and "camron" collaborations.', function () {
-  //   return server.wait(500, "until users is found", function () {
-  //     return Meteor.users.findOne({username: "camron"}).getCollaborations();
-  //   }).then(function (collaborations){
-  //
-  //     // expected collaborations
-  //     expect(collaborations).to.include("ucsf");
-  //     expect(collaborations).to.include("camron");
-  //
-  //     // denied collaborations
-  //     expect(collaborations).to.not.include("wcdt");
-  //     expect(collaborations).to.not.include("ckcc");
-  //     expect(collaborations).to.not.include("ucla");
-  //     expect(collaborations).to.not.include("ucsc");
-  //     expect(collaborations).to.not.include("genomics");
-  //
-  //   });
-  // });
-  //
-  // it('User.getAssociatedCollaborations() - Camron has associative access to the WCDT collaborations.', function () {
-  //   return server.wait(500, "until users is found", function () {
-  //     return Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
-  //   }).then(function (collaborations){
-  //
-  //     // expected collaborations
-  //     expect(collaborations).to.include("wcdt");
-  //     expect(collaborations).to.include("ucsf");
-  //     expect(collaborations).to.include("camron");
-  //
-  //     // denied collaborations
-  //     expect(collaborations).to.not.include("ckcc");
-  //     expect(collaborations).to.not.include("ucla");
-  //     expect(collaborations).to.not.include("ucsc");
-  //     expect(collaborations).to.not.include("genomics");
-  //   });
-  // });
+  it('User.getCollaborations() - Camron belongs to the "ucsf" and "camron" collaborations.', function () {
+    return server.wait(500, "until users is found", function () {
+      return Meteor.users.findOne({username: "camron"}).getCollaborations();
+    }).then(function (collaborations){
 
-  // it('User.getCollaborationStudies() - Camron has access to UCSF and WCDT studies.', function () {
-  //   return server.wait(500, "until users is found", function () {
-  //     return Meteor.users.findOne({username: "camron"}).getCollaborationStudies();
-  //   }).then(function (studies){
-  //     // expected studies
-  //     expect(studies).to.include("lymphoma");
-  //     expect(studies).to.include("granuloma");
-  //     expect(studies).to.include("satisfaction");
-  //
-  //     // denied studies
-  //     expect(studies).to.not.include("neuroblastoma");
-  //     expect(studies).to.not.include("melanoma");
-  //     expect(studies).to.not.include("sarcoma");
-  //     expect(studies).to.not.include("carcinoma");
-  //   });
-  // });
-  // it('User.getCollaborationQuestionnaires() - Camron has access to UCSF and WCDT questionnaires.', function () {
-  //   return server.wait(500, "until users is found", function () {
-  //     return Meteor.users.findOne({username: "camron"});
-  //   }).then(function (user){
-  //     user = new User(user);
-  //
-  //     var studies = user.getCollaborationStudies();
-  //     var questionnaires = [];
-  //     studies.forEach(function (study){
-  //       questionnaires.push(study.getQuestionnaires());
-  //     });
-  //     // expected questionnaires
-  //     expect(questionnaires).to.include("Followup");
-  //     expect(questionnaires).to.include("Demographics");
-  //     expect(questionnaires).to.include("Patient_Enrollment_form");
-  //     expect(questionnaires).to.include("Blood_Labs_V2");
-  //     expect(questionnaires).to.include("Patient_Satisfaction");
-  //
-  //     // denied questionnaires
-  //     expect(questionnaires).to.include("Followup");
-  //     expect(questionnaires).to.include("Demographics");
-  //     expect(questionnaires).to.include("Patient_Enrollment_form");
-  //     expect(questionnaires).to.include("Blood_Labs_V2");
-  //     expect(questionnaires).to.include("Patient_Satisfaction");
-  //   });
-  // });
+      // expected collaborations
+      expect(collaborations).to.include("ucsf");
+      expect(collaborations).to.include("camron");
 
+      // denied collaborations
+      expect(collaborations).to.not.include("wcdt");
+      expect(collaborations).to.not.include("ckcc");
+      expect(collaborations).to.not.include("ucla");
+      expect(collaborations).to.not.include("ucsc");
+      expect(collaborations).to.not.include("genomics");
 
+    });
+  });
+
+  it('User.getAssociatedCollaborations() - Camron has associative access to the WCDT collaborations.', function () {
+    return server.wait(500, "until users is found", function () {
+      return Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
+    }).then(function (collaborations){
+
+      // expected collaborations
+      expect(collaborations).to.include("wcdt");
+      expect(collaborations).to.include("ucsf");
+      expect(collaborations).to.include("camron");
+
+      // denied collaborations
+      expect(collaborations).to.not.include("ckcc");
+      expect(collaborations).to.not.include("ucla");
+      expect(collaborations).to.not.include("ucsc");
+      expect(collaborations).to.not.include("genomics");
+    });
+  });
+
+  it('User.getCollaborationStudies() - Camron has access to UCSF and WCDT studies.', function () {
+    return server.wait(500, "until users is found", function () {
+      return Meteor.users.findOne({username: "camron"}).getCollaborationStudies();
+    }).then(function (studies){
+      // expected studies
+      expect(studies).to.include("lymphoma");
+      expect(studies).to.include("granuloma");
+      expect(studies).to.include("satisfaction");
+
+      // denied studies
+      expect(studies).to.not.include("neuroblastoma");
+      expect(studies).to.not.include("melanoma");
+      expect(studies).to.not.include("sarcoma");
+      expect(studies).to.not.include("carcinoma");
+    });
+  });
+  it('User.getCollaborationQuestionnaires() - Camron has access to UCSF and WCDT questionnaires.', function () {
+    return server.wait(500, "until users is found", function () {
+      return Meteor.users.findOne({username: "camron"});
+    }).then(function (user){
+      user = new User(user);
+
+      var studies = user.getCollaborationStudies();
+      var questionnaires = [];
+      studies.forEach(function (study){
+        questionnaires.push(study.getQuestionnaires());
+      });
+      // expected questionnaires
+      expect(questionnaires).to.include("Followup");
+      expect(questionnaires).to.include("Demographics");
+      expect(questionnaires).to.include("Patient_Enrollment_form");
+      expect(questionnaires).to.include("Blood_Labs_V2");
+      expect(questionnaires).to.include("Patient_Satisfaction");
+
+      // denied questionnaires
+      expect(questionnaires).to.include("Followup");
+      expect(questionnaires).to.include("Demographics");
+      expect(questionnaires).to.include("Patient_Enrollment_form");
+      expect(questionnaires).to.include("Blood_Labs_V2");
+      expect(questionnaires).to.include("Patient_Satisfaction");
+    });
+  });
 
 
 
-  // it("Other collections can use Collaborations.getCollaborationGraph() in their publication functions.", function () {
-  //   return client.execute(function () {
-  //     expect(false).to.be.true;
-  //   });
-  // });
 
-  // //==================================================
-  // // COLLABORATION GRAPH TESTS
-  //
-  // Kutner should have access to:
-  //   Studies
-  //     Carcinoma Study
-  //     Sarcoma Study
-  //     Neuroblastoma Study
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Carcinoma Followup
-  //     Carcinoma RNA Seq
-  //     Sarcoma Followup
-  //     Sarcoma Laser Disection
-  //     Neuroblastoma Intake
-  //     Neuroblastoma RNA Seq
-  //     Neuroblatoma Followup
-  //     Patient Satisfaction
-  //
-  // Thirteen should have access to:
-  //   Studies
-  //     Neuroblastoma Study
-  //   Questionnaires
-  //     Neuroblastoma Intake
-  //     Neuroblastoma RNA Seq
-  //     Neuroblatoma Followup
-  //
-  // Cuddy should have access to:
-  //   Studies
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Patient Satisfaction
-  //
-  // Wilson should have access to:
-  //   Studies
-  //     Melanoma Study
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Melanoma RNA Seq
-  //     Melanoma Followup
-  //     Patient Satisfaction
-  //
-  // Foreman should have access to:
-  //   Studies
-  //     Sarcoma Study
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Sarcoma Laser Dissection
-  //     Sarcoma Followup
-  //     Patient Satisfaction
-  //
-  // Chase should have access to:
-  //   Studies
-  //     Carcinoma Followup
-  //     Carcinoma RNA Seq
-  //     Sarcoma Laser Dissection
-  //     Sarcoma Followup
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Carcinoma Study
-  //     Sarcoma Study
-  //     Patient Satisfaction
-  //
-
-  // House should have access to:
-  //   Studies
-  //     Granuloma Study
-  //     Lymphoma Study
-  //     Patient Satisfaction
-  //   Questionnaires
-  //     Lymphoma Followup
-  //     Lymphoma Demographics
-  //     Granuloma Patient Intake
-  //     Granuloma Blood Labs
-  //     Granuloma Followup
-  //     Patient Satisfaction
 
 
 });

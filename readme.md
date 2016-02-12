@@ -1,7 +1,8 @@
 clinical:collaborations
 ======================================
 
-Collaboration based security architecture (similar to Roles and Friends) using a bottom-up collaboration model.
+Collaboration based security architecture (similar to Roles and Friends) using a bottom-up collaboration model.  
+
 [![Circle CI](https://circleci.com/gh/clinical-meteor/collaborations/tree/master.svg?style=svg)](https://circleci.com/gh/clinical-meteor/collaborations/tree/master)
 
 ========================================

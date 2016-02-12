@@ -95,7 +95,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
   it('Confirm studies are initialized', function () {
     app.execute(function () {
       Meteor.startup(function (){
-        Studies = new Mongo.Collection('studies');
+        var Studies = new Mongo.Collection('studies');
         if (Studies.find().count() === 0) {
           Studies.upsert({
             _id: "neuroblastoma"
@@ -126,7 +126,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
   });
   it('publication/subscription works', function () {
     app.execute(function () {
-      Studies = new Mongo.Collection('studies');
+      var Studies = new Mongo.Collection('studies');
       if (Studies.find().count() === 0) {
         Studies.upsert({
           _id: "neuroblastoma"

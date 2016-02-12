@@ -139,8 +139,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
       // ============================================================================
       // INITIALIZE USERS
       var userId = null;
-      
-      // crate our administrator
+
       userId = Accounts.createUser({
         username: 'house',
         password: 'house',
@@ -151,7 +150,6 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/gregory.house.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
       userId = Accounts.createUser({
         username: 'camron',
@@ -163,9 +161,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/allison.camron.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'foreman',
         password: 'foreman',
@@ -176,9 +172,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/eric.foreman.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'wilson',
         password: 'wilson',
@@ -189,10 +183,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/james.wilson.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
-
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'kutner',
         password: 'kutner',
@@ -203,10 +194,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/lawrence.kutner.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
-
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'cuddy',
         password: 'cuddy',
@@ -214,13 +202,13 @@ describe("clinical:collaborations - collaboration scenario", function () {
         profile: {
           fullName: 'Lisa Cuddy',
           role: 'Physician',
-          avatar: '/packages/clinical_accounts-housemd/housemd/lisa.cuddy.jpg'
+          avatar: '/packages/clinical_accounts-housemd/housemd/lisa.cuddy.jpg',
+          collaborations: [
+            "wcdt"
+          ]
         }
       });
-      console.info('Account created: ' + userId);
 
-
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'chase',
         password: 'chase',
@@ -228,14 +216,13 @@ describe("clinical:collaborations - collaboration scenario", function () {
         profile: {
           fullName: 'Robert Chase',
           role: 'Physician',
-          avatar: '/packages/clinical_accounts-housemd/housemd/robert.chase.jpg'
+          avatar: '/packages/clinical_accounts-housemd/housemd/robert.chase.jpg',
+          collaborations: [
+            "genomics"
+          ]
         }
       });
-      console.info('Account created: ' + userId);
 
-
-
-      // crate our administrator
       userId = Accounts.createUser({
         username: 'thirteen',
         password: 'thirteen',
@@ -246,10 +233,14 @@ describe("clinical:collaborations - collaboration scenario", function () {
           avatar: '/packages/clinical_accounts-housemd/housemd/thirteen.jpg'
         }
       });
-      console.info('Account created: ' + userId);
 
       var adminUser = Meteor.users.findOne({username: "cuddy"});
       expect(adminUser.username).to.equal('cuddy');
+      expect(adminUser.getAssociatedCollaborations().length).to.equal(1);
+
+      var adminUser = Meteor.users.findOne({username: "chase"});
+      expect(adminUser.username).to.equal('chase');
+      expect(adminUser.getAssociatedCollaborations().length).to.equal(3);
 
       // ============================================================================
       // INITIALIZE COLLABORATIONS

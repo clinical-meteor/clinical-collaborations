@@ -14,17 +14,19 @@ describe("clinical:collaborations - collaboration scenario", function () {
   before(function () {
     server.execute(function () {
       // we need to define the collection which we're going to apply the collaboration security model to
-      var Studies = new Mongo.Collection('studies');
-      Studies.allow({
-        insert: function insertStudy (id, doc){
-          return true;
-        },
-        update: function updateStudy (id, doc){
-          return true;
-        },
-        remove: function removeStudy (id, doc){
-          return true;
-        }
+      Meteor.startup(function (){
+        Studies = new Mongo.Collection('studies');
+        Studies.allow({
+          insert: function insertStudy (id, doc){
+            return true;
+          },
+          update: function updateStudy (id, doc){
+            return true;
+          },
+          remove: function removeStudy (id, doc){
+            return true;
+          }
+        });
       });
 
       Meteor.methods({

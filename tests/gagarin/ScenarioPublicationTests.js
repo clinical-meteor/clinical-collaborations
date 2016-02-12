@@ -65,23 +65,36 @@ describe("clinical:collaborations - collaboration scenario", function () {
     });
   });
   afterEach(function () {
-    server.execute(function () {
+    return server.execute(function () {
       Studies.remove({});
       Collaborations.remove({});
       Meteor.users.remove({});
     });
-    client.execute(function () {
-      return Studies.find().forEach(function (study) {
-        Studies.remove({
-          _id: study._id
-        });
-      });
-    });
+    // client.execute(function () {
+    //   return Studies.find().forEach(function (study) {
+    //     Studies.remove({
+    //       _id: study._id
+    //     });
+    //   });
+    // });
+
+    // app.execute(function () {
+    //   Studies.remove({});
+    //   Collaborations.remove({});
+    //   Meteor.users.remove({});
+    // });
+    // browserClient.execute(function () {
+    //   return Studies.find().forEach(function (study) {
+    //     Studies.remove({
+    //       _id: study._id
+    //     });
+    //   });
+    // });
   });
 
   it('Confirm studies are initialized', function () {
     return server.execute(function () {
-
+      var Studies = new Mongo.Collection('studies');
       if (Studies.find().count() === 0) {
         Studies.upsert({
           _id: "neuroblastoma"

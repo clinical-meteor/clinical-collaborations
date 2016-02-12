@@ -346,7 +346,7 @@ describe('clinical:collaborations - getCollaboratorsGraph()', function () {
   });
 
   after(function () {
-    server.execute(function () {
+    return server.execute(function () {
       Collaborations.remove({});
       Meteor.users.remove({});
       Studies.remove({});
@@ -356,7 +356,7 @@ describe('clinical:collaborations - getCollaboratorsGraph()', function () {
 
 
   it('Confirm house exists', function () {
-    server.execute(function () {
+    return server.execute(function () {
       return Meteor.users.findOne({username: 'house'});
     }).then(function (user){
       expect(user).to.exist;

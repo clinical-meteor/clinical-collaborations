@@ -93,8 +93,8 @@ describe("clinical:collaborations - collaboration scenario", function () {
   });
 
   it('Confirm studies are initialized', function () {
-    return server.execute(function () {
-      var Studies = new Mongo.Collection('studies');
+    return app.execute(function () {
+      //var Studies = new Mongo.Collection('studies');
       if (Studies.find().count() === 0) {
         Studies.upsert({
           _id: "neuroblastoma"
@@ -123,7 +123,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
     });
   });
   it('Studies publication/subscription works', function () {
-    return server.wait(1000, "until studies are loaded", function () {
+    return app.wait( function () {
 
       if (Studies.find().count() === 0) {
         Studies.upsert({
@@ -158,9 +158,9 @@ describe("clinical:collaborations - collaboration scenario", function () {
   it("studies publication should filter by collaboration", function () {
     app.execute(function () {
 
-      Meteor.call('initializeUsers');
-      Meteor.call('initializeSecurityScenarioStudies');
-      Meteor.call('initializeDefaultCollaborations');
+      // Meteor.call('initializeUsers');
+      // Meteor.call('initializeSecurityScenarioStudies');
+      // Meteor.call('initializeDefaultCollaborations');
 
       // var adminUser = Meteor.users.findOne({username: "cuddy"});
       // expect(adminUser.username).to.equal('cuddy');

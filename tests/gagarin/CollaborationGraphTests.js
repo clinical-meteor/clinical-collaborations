@@ -346,7 +346,7 @@ describe('clinical:collaborations - getCollaboratorsGraph()', function () {
   });
 
   after(function () {
-    return server.execute(function () {
+    server.execute(function () {
       Collaborations.remove({});
       Meteor.users.remove({});
       Studies.remove({});

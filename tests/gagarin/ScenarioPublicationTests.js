@@ -65,7 +65,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
     });
   });
   afterEach(function () {
-    return server.execute(function () {
+    server.execute(function () {
       Studies.remove({});
       Collaborations.remove({});
       Meteor.users.remove({});
@@ -93,7 +93,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
   });
 
   it('Confirm studies are initialized', function () {
-    return app.execute(function () {
+    app.execute(function () {
       //var Studies = new Mongo.Collection('studies');
       if (Studies.find().count() === 0) {
         Studies.upsert({
@@ -117,13 +117,19 @@ describe("clinical:collaborations - collaboration scenario", function () {
         });
       }
 
-      return Studies.find().fetch();
-    }).then(function (studies) {
+      var studies = Studies.find().fetch();
       expect(studies.length).to.equal(1);
+      expect(studies[0].name).to.equal("Nifty Neuroblastoma Study");
     });
+
+
+    //   return Studies.find().fetch();
+    // }).then(function (studies) {
+    //   expect(studies.length).to.equal(1);
+    // });
   });
   it('Studies publication/subscription works', function () {
-    return app.wait( function () {
+    return server.wait( function () {
 
       if (Studies.find().count() === 0) {
         Studies.upsert({

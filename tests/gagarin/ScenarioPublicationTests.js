@@ -121,16 +121,9 @@ describe("clinical:collaborations - collaboration scenario", function () {
       expect(studies.length).to.equal(1);
       expect(studies[0].name).to.equal("Nifty Neuroblastoma Study");
     });
-
-
-    //   return Studies.find().fetch();
-    // }).then(function (studies) {
-    //   expect(studies.length).to.equal(1);
-    // });
   });
   it('Studies publication/subscription works', function () {
-    return server.wait( function () {
-
+    app.execute(function () {
       if (Studies.find().count() === 0) {
         Studies.upsert({
           _id: "neuroblastoma"
@@ -151,17 +144,20 @@ describe("clinical:collaborations - collaboration scenario", function () {
             ]
           }
         });
-
       }
-      return Studies.find().fetch();
-    }).then(function (studies) {
-      expect(studies.length).to.equal(1);
+      Meteor.publish('basicStudies', function () {
+        return Studies.find();
+      });
+      client.subscribe('basicStudies');
+      var studies = client.collection("studies");
+      expect(Object.keys(studies).length).to.equal(3);
+      expect(studies.neuroblastoma.name).to.equal("Nifty Neuroblastoma Study");
     });
   });
 
   //==================
   // ALMOST THERE
-  it("studies publication should filter by collaboration", function () {
+  it("Studies publication should filter by collaboration", function () {
     app.execute(function () {
 
       // Meteor.call('initializeUsers');

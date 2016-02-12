@@ -46,6 +46,6 @@ test:
   pre:
     - cd helloworld && meteor:
           background: true
-    - sleep 80
+    - sleep 30
   override:
     - cd helloworld && starrynight run-tests --type package-verification

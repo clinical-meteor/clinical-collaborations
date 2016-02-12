@@ -1,4 +1,4 @@
-Meteor.publish('collaborations', function() {
+Meteor.publish('collaborations', function () {
   if (this.userId === null){
     var user = Meteor.users.findOne({_id: this.userId});
 

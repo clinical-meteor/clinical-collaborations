@@ -11,60 +11,59 @@ describe("clinical:collaborations - collaboration scenario", function () {
     location: app
   });
 
-  before(function () {
-    server.execute(function () {
-      // we need to define the collection which we're going to apply the collaboration security model to
-      Meteor.startup(function (){
-        Studies = new Mongo.Collection('studies');
-        Studies.allow({
-          insert: function insertStudy (id, doc){
-            return true;
-          },
-          update: function updateStudy (id, doc){
-            return true;
-          },
-          remove: function removeStudy (id, doc){
-            return true;
-          }
-        });
-      });
-
-      Meteor.methods({
-        addUcscStudy: function () {
-          Studies.insert({
-            "_id": "ucsctest",
-            "cbio_id": Random.id(),
-            "name": "Ucsc Test Study",
-            "short_name": "satisfaction",
-            "description": "Ucsc Test Study",
-            "public": false,
-            "citation": "unpublished",
-            "collaborations": ["ucsc"],
-            "tables": [],
-            "Questionnaires": [
-              "Foo"
-            ]
-          });
-        },
-        addUcsfStudy: function () {
-          Studies.insert({
-            "_id": "ucsftest",
-            "cbio_id": Random.id(),
-            "name": "Ucsf Test Study",
-            "short_name": "satisfaction",
-            "description": "Ucsf Test Study",
-            "public": false,
-            "citation": "unpublished",
-            "collaborations": ["ucsf"],
-            "tables": [],
-            "Questionnaires": [
-              "Foo"
-            ]
-          });
-        }
-      });
-    });
-  });
+  // before(function () {
+  //   server.execute(function () {
+  //     // // we need to define the collection which we're going to apply the collaboration security model to
+  //     // Meteor.startup(function (){
+  //     //   Studies.allow({
+  //     //     insert: function insertStudy (id, doc){
+  //     //       return true;
+  //     //     },
+  //     //     update: function updateStudy (id, doc){
+  //     //       return true;
+  //     //     },
+  //     //     remove: function removeStudy (id, doc){
+  //     //       return true;
+  //     //     }
+  //     //   });
+  //     // });
+  //     //
+  //     // Meteor.methods({
+  //     //   addUcscStudy: function () {
+  //     //     Studies.insert({
+  //     //       "_id": "ucsctest",
+  //     //       "cbio_id": Random.id(),
+  //     //       "name": "Ucsc Test Study",
+  //     //       "short_name": "satisfaction",
+  //     //       "description": "Ucsc Test Study",
+  //     //       "public": false,
+  //     //       "citation": "unpublished",
+  //     //       "collaborations": ["ucsc"],
+  //     //       "tables": [],
+  //     //       "Questionnaires": [
+  //     //         "Foo"
+  //     //       ]
+  //     //     });
+  //     //   },
+  //     //   addUcsfStudy: function () {
+  //     //     Studies.insert({
+  //     //       "_id": "ucsftest",
+  //     //       "cbio_id": Random.id(),
+  //     //       "name": "Ucsf Test Study",
+  //     //       "short_name": "satisfaction",
+  //     //       "description": "Ucsf Test Study",
+  //     //       "public": false,
+  //     //       "citation": "unpublished",
+  //     //       "collaborations": ["ucsf"],
+  //     //       "tables": [],
+  //     //       "Questionnaires": [
+  //     //         "Foo"
+  //     //       ]
+  //     //     });
+  //     //   }
+  //     // });
+  //   });
+  // });
   afterEach(function () {
     server.execute(function () {
       Studies.remove({});
@@ -96,6 +95,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
   it('Confirm studies are initialized', function () {
     app.execute(function () {
       Meteor.startup(function (){
+        Studies = new Mongo.Collection('studies');
         if (Studies.find().count() === 0) {
           Studies.upsert({
             _id: "neuroblastoma"
@@ -124,33 +124,32 @@ describe("clinical:collaborations - collaboration scenario", function () {
       });
     });
   });
-  it('Studies publication/subscription works', function () {
+  it('publication/subscription works', function () {
     app.execute(function () {
-      Meteor.startup(function (){
-        if (Studies.find().count() === 0) {
-          Studies.upsert({
-            _id: "neuroblastoma"
-          }, {
-            $set: {
-              "cbio_id": "112",
-              "name": "Nifty Neuroblastoma Study",
-              "short_name": "neuroblastoma",
-              "description": "Nifty Neuroblastoma Study",
-              "public": false,
-              "citation": "unpublished",
-              "collaborations": ["ckcc"],
-              "tables": [],
-              "Questionnaires": [
-                "Patient_Enrollment_form",
-                "RNASeq_completion_form",
-                "Followup"
-              ]
-            }
-          });
-        }
-        Meteor.publish('basicStudies', function () {
-          return Studies.find();
+      Studies = new Mongo.Collection('studies');
+      if (Studies.find().count() === 0) {
+        Studies.upsert({
+          _id: "neuroblastoma"
+        }, {
+          $set: {
+            "cbio_id": "112",
+            "name": "Nifty Neuroblastoma Study",
+            "short_name": "neuroblastoma",
+            "description": "Nifty Neuroblastoma Study",
+            "public": false,
+            "citation": "unpublished",
+            "collaborations": ["ckcc"],
+            "tables": [],
+            "Questionnaires": [
+              "Patient_Enrollment_form",
+              "RNASeq_completion_form",
+              "Followup"
+            ]
+          }
         });
+      }
+      Meteor.publish('basicStudies', function () {
+        return Studies.find();
       });
     });
 

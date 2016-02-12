@@ -65,12 +65,12 @@ describe("clinical:collaborations - collaboration scenario", function () {
     });
   });
   afterEach(function () {
-    app.execute(function () {
+    server.execute(function () {
       Studies.remove({});
       Collaborations.remove({});
       Meteor.users.remove({});
     });
-    browserClient.execute(function () {
+    client.execute(function () {
       return Studies.find().forEach(function (study) {
         Studies.remove({
           _id: study._id
@@ -80,8 +80,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
   });
 
   it('Confirm studies are initialized', function () {
-    return server.wait(1000, "until studies are loaded", function () {
-
+    return server.execute(function () {
 
       if (Studies.find().count() === 0) {
         Studies.upsert({

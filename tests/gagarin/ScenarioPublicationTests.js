@@ -5,22 +5,25 @@ describe("clinical:collaborations - collaboration scenario", function () {
   var client = ddp(app, {
     flavor: "fiber"
   });
-  var browserClient = browser({flavor: "fiber", location: app});
+  var browserClient = browser({
+    flavor: "fiber",
+    location: app
+  });
   var server = meteor();
 
-  before(function (){
-    app.execute(function (){
+  before(function () {
+    app.execute(function () {
       // we need to define the collection which we're going to apply the collaboration security model to
-      Meteor.startup(function(){
-        Studies = new Mongo.Collection('studies');
+      Meteor.startup(function () {
+        var Studies = new Mongo.Collection('studies');
         Studies.allow({
-          insert: function insertStudy (id, doc) {
+          insert: function insertStudy(id, doc) {
             return true;
           },
-          update: function updateStudy (id, doc) {
+          update: function updateStudy(id, doc) {
             return true;
           },
-          remove: function removeStudy (id, doc) {
+          remove: function removeStudy(id, doc) {
             return true;
           }
         });
@@ -61,15 +64,17 @@ describe("clinical:collaborations - collaboration scenario", function () {
       });
     });
   });
-  afterEach(function (){
-    app.execute(function (){
+  afterEach(function () {
+    app.execute(function () {
       Studies.remove({});
       Collaborations.remove({});
       Meteor.users.remove({});
     });
-    browserClient.execute(function (){
-      return Studies.find().forEach(function (study){
-        Studies.remove({_id: study._id});
+    browserClient.execute(function () {
+      return Studies.find().forEach(function (study) {
+        Studies.remove({
+          _id: study._id
+        });
       });
     });
   });
@@ -149,9 +154,13 @@ describe("clinical:collaborations - collaboration scenario", function () {
       // expect(adminUser.username).to.equal('cuddy');
 
       Meteor.publish('wcdtStudies', function () {
-        var adminUser = Meteor.users.findOne({username: "chase"});
+        var adminUser = Meteor.users.findOne({
+          username: "chase"
+        });
         return Studies.find({
-          collaborations: {$in: adminUser.getAssociatedCollaborations()}
+          collaborations: {
+            $in: adminUser.getAssociatedCollaborations()
+          }
         });
       });
     });

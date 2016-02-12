@@ -47,7 +47,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
     });
   });
   afterEach(function (){
-    app.execute(function(){
+    app.execute(function (){
       Studies.remove({});
       Collaborations.remove({});
       Meteor.users.remove({});

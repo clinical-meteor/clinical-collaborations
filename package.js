@@ -54,10 +54,8 @@ Package.onUse(function (api) {
 
   api.addFiles([
     'server/accounts.js',
-    'server/helpers.js',
     'server/methods.js',
-    'server/publications.js',
-    //'server/methods.initialization.js'
+    'server/publications.js'
   ], ['server']);
 
 

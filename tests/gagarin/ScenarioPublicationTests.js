@@ -1,4 +1,5 @@
 describe("clinical:collaborations - collaboration scenario", function () {
+  var server = meteor();
   var app = meteor({
     flavor: "fiber"
   });
@@ -12,22 +13,21 @@ describe("clinical:collaborations - collaboration scenario", function () {
   var server = meteor();
 
   before(function () {
-    app.execute(function () {
+    server.execute(function () {
       // we need to define the collection which we're going to apply the collaboration security model to
-      Meteor.startup(function () {
-        var Studies = new Mongo.Collection('studies');
-        Studies.allow({
-          insert: function insertStudy(id, doc) {
-            return true;
-          },
-          update: function updateStudy(id, doc) {
-            return true;
-          },
-          remove: function removeStudy(id, doc) {
-            return true;
-          }
-        });
+      var Studies = new Mongo.Collection('studies');
+      Studies.allow({
+        insert: function insertStudy (id, doc){
+          return true;
+        },
+        update: function updateStudy (id, doc){
+          return true;
+        },
+        remove: function removeStudy (id, doc){
+          return true;
+        }
       });
+
       Meteor.methods({
         addUcscStudy: function () {
           Studies.insert({

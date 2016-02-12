@@ -136,6 +136,10 @@ describe("clinical:collaborations - collaboration scenario", function () {
       // Meteor.call('initializeSecurityScenarioStudies');
       // Meteor.call('initializeDefaultCollaborations');
 
+      // ============================================================================
+      // INITIALIZE USERS
+      var userId = null;
+      
       // crate our administrator
       userId = Accounts.createUser({
         username: 'house',

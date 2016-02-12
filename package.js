@@ -27,8 +27,6 @@ Package.onUse(function (api) {
     'clinical:base-model@1.3.0',
     'matb33:collection-hooks@0.8.1',
     'clinical:user-model@1.4.1'
-    // 'accounts-base',
-    // 'accounts-password',
   ], ['client', 'server']);
 
   api.imply('mongo');
@@ -37,8 +35,6 @@ Package.onUse(function (api) {
   api.imply('accounts-base');
   api.imply('accounts-password');
   api.imply('clinical:user-model');
-  // api.imply('aldeed:collection2');
-  // api.imply('clinical:base-model');
 
   api.addFiles([
     'client/subscriptions.js',
@@ -48,8 +44,7 @@ Package.onUse(function (api) {
     'lib/collection.collaborations.js',
     'lib/object.collaboration.js',
     'lib/object.user.js',
-    'lib/extentions.js',
-    //'lib/object.user.js'
+    'lib/extentions.js'
   ]);
 
   api.addFiles([

@@ -459,49 +459,14 @@ describe('clinical:collaborations - Publication/Subscription', function () {
     // check the new data arrived or not
     posts = client.collection("posts");
     expect(Object.keys(posts).length).to.equal(2);
-  });
 
-  it("Studies publication/subscription should filter by collaboration", function () {
-    return server.wait(1000, 'until collaborations collection is available on server', function (){
-      // return Collaborations.findOne({_id: 'ucsf'}).getAssociatedCollaborators();
-
-      Meteor.publish("studies", function (studyId) {
-        var associatedCollaborations = Meteor.users.findOne({username: "camron"}).getAssociatedCollaborations();
-        return Studies.findOne({
-          collaborations: {$in: associatedCollaborations}
-        });
-      });
-
-      return true;
-    }).then(function (){
-      return client.wait(1000, 'until collaborations loads on client', function (){
-        // var approvedStudies = Studies.find().map(function(record){
-        //   return record._id;
-        // });
-        return client.wait(1000, 'until collaborations loads on client', function (){
-          Meteor.subscribe("studies");
-        });
-
-        expect(Studies).to.exist;
-        var studies = Studies.find();
-        expect(studies.length).to.equal(7);
-
-        // // expected studies
-        // expect(approvedStudies).to.include("granuloma");
-        // expect(approvedStudies).to.include("lymphoma");
-        // expect(approvedStudies).to.include("satisfaction");
-        //
-        // // denied studies
-        // expect(approvedStudies).to.not.include("sarcoma");
-        // expect(approvedStudies).to.not.include("melanoma");
-        // expect(approvedStudies).to.not.include("neuroblastoma");
-        // expect(approvedStudies).to.not.include("carcinoma");
-
-      });
-
+    console.log('posts', posts);
+    console.log('posts[0]', posts[0]);
+    Object.keys(posts).forEach(function (key){
+      console.log('key', key);
     });
-  });
 
+  });
 
   it("Collaboration.getAssociatedCollaborators() - UCSF has associative collaboration with WCDT ", function () {
     return server.wait(1000, 'until collaborations collection is available on server', function (){
@@ -591,48 +556,53 @@ describe('clinical:collaborations - Publication/Subscription', function () {
     });
   });
 
-  it('User.getCollaborationStudies() - Camron has access to UCSF and WCDT studies.', function () {
-    return server.wait(500, "until users is found", function () {
-      return Meteor.users.findOne({username: "camron"}).getCollaborationStudies();
-    }).then(function (studies){
-      // expected studies
-      expect(studies).to.include("lymphoma");
-      expect(studies).to.include("granuloma");
-      expect(studies).to.include("satisfaction");
-
-      // denied studies
-      expect(studies).to.not.include("neuroblastoma");
-      expect(studies).to.not.include("melanoma");
-      expect(studies).to.not.include("sarcoma");
-      expect(studies).to.not.include("carcinoma");
-    });
-  });
-  it('User.getCollaborationQuestionnaires() - Camron has access to UCSF and WCDT questionnaires.', function () {
-    return server.wait(500, "until users is found", function () {
-      return Meteor.users.findOne({username: "camron"});
-    }).then(function (user){
-      user = new User(user);
-
-      var studies = user.getCollaborationStudies();
-      var questionnaires = [];
-      studies.forEach(function (study){
-        questionnaires.push(study.getQuestionnaires());
-      });
-      // expected questionnaires
-      expect(questionnaires).to.include("Followup");
-      expect(questionnaires).to.include("Demographics");
-      expect(questionnaires).to.include("Patient_Enrollment_form");
-      expect(questionnaires).to.include("Blood_Labs_V2");
-      expect(questionnaires).to.include("Patient_Satisfaction");
-
-      // denied questionnaires
-      expect(questionnaires).to.include("Followup");
-      expect(questionnaires).to.include("Demographics");
-      expect(questionnaires).to.include("Patient_Enrollment_form");
-      expect(questionnaires).to.include("Blood_Labs_V2");
-      expect(questionnaires).to.include("Patient_Satisfaction");
-    });
-  });
+  // // The following two tests are collection specific (Studies and Questionnaires)
+  // // They should be moved into Studies/Questionnaire packages.
+  // // More specifically, they need to rewritten using a generic Record schema of some sort
+  // // Or tested in an application baseline test
+  //
+  // it('User.getCollaborationStudies() - Camron has access to UCSF and WCDT studies.', function () {
+  //   return server.wait(500, "until users is found", function () {
+  //     return Meteor.users.findOne({username: "camron"}).getCollaborationStudies();
+  //   }).then(function (studies){
+  //     // expected studies
+  //     expect(studies).to.include("lymphoma");
+  //     expect(studies).to.include("granuloma");
+  //     expect(studies).to.include("satisfaction");
+  //
+  //     // denied studies
+  //     expect(studies).to.not.include("neuroblastoma");
+  //     expect(studies).to.not.include("melanoma");
+  //     expect(studies).to.not.include("sarcoma");
+  //     expect(studies).to.not.include("carcinoma");
+  //   });
+  // });
+  // it('User.getCollaborationQuestionnaires() - Camron has access to UCSF and WCDT questionnaires.', function () {
+  //   return server.wait(500, "until users is found", function () {
+  //     return Meteor.users.findOne({username: "camron"});
+  //   }).then(function (user){
+  //     user = new User(user);
+  //
+  //     var studies = user.getCollaborationStudies();
+  //     var questionnaires = [];
+  //     studies.forEach(function (study){
+  //       questionnaires.push(study.getQuestionnaires());
+  //     });
+  //     // expected questionnaires
+  //     expect(questionnaires).to.include("Followup");
+  //     expect(questionnaires).to.include("Demographics");
+  //     expect(questionnaires).to.include("Patient_Enrollment_form");
+  //     expect(questionnaires).to.include("Blood_Labs_V2");
+  //     expect(questionnaires).to.include("Patient_Satisfaction");
+  //
+  //     // denied questionnaires
+  //     expect(questionnaires).to.include("Followup");
+  //     expect(questionnaires).to.include("Demographics");
+  //     expect(questionnaires).to.include("Patient_Enrollment_form");
+  //     expect(questionnaires).to.include("Blood_Labs_V2");
+  //     expect(questionnaires).to.include("Patient_Satisfaction");
+  //   });
+  // });
 
 
 

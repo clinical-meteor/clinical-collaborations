@@ -10,6 +10,19 @@ describe("clinical:collaborations - collaboration scenario", function () {
 
   before(function (){
     app.execute(function (){
+      // we need to define the collection which we're going to apply the collaboration security model to
+      Studies = new Mongo.Collection('studies');
+      Studies.allow({
+        insert: function insertStudy (id, doc) {
+          return true;
+        },
+        update: function updateStudy (id, doc) {
+          return true;
+        },
+        remove: function removeStudy (id, doc) {
+          return true;
+        }
+      });
       Meteor.methods({
         addUcscStudy: function () {
           Studies.insert({
@@ -134,7 +147,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
       // expect(adminUser.username).to.equal('cuddy');
 
       Meteor.publish('wcdtStudies', function () {
-      var adminUser = Meteor.users.findOne({username: "chase"});
+        var adminUser = Meteor.users.findOne({username: "chase"});
         return Studies.find({
           collaborations: {$in: adminUser.getAssociatedCollaborations()}
         });
@@ -191,29 +204,7 @@ describe("clinical:collaborations - collaboration scenario", function () {
     expect(studies.granuloma).to.not.exist;
     expect(studies.melanoma).to.not.exist;
   });
-  //
-  // //==================
-  // // Users Check
-  // it("users publication should send account info to client", function () {
-  //   app.execute(function () {
-  //
-  //     Meteor.call('initializeUsers');
-  //     Meteor.call('initializeSecurityScenarioStudies');
-  //     Meteor.call('initializeDefaultCollaborations');
-  //
-  //     // var adminUser = Meteor.users.findOne("cuddy");
-  //     // expect(adminUser.username).to.equal('cuddy');
-  //
-  //     Meteor.publish('currentUsers', function () {
-  //       return Meteor.users.find();
-  //     });
-  //   });
-  //
-  //   // subscribe to getStudies publication and wait for the ready message
-  //   client.subscribe('currentUsers');
-  //   var users = client.collection("users");
-  //   expect(Object.keys(users).length).to.equal(8);
-  // });
+
 
 
 });

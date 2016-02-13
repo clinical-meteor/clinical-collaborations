@@ -107,7 +107,7 @@ For the latest API specs, please visit [http://clinical-docs.meteor.com](http://
 
 
 ========================================
-#### Collaboration Model
+#### Collaboration Testing Scenario
 
 The clinical:collaborations package uses the following security scenario for testing and verification testing.  It should be stressed that a **bottom-up** collaboration model is used; meaning the users associated with the collaboration at the 'top' of the model have the least access to individual projects, but the widest influence. This is not a command-and-control hierarchy.  It's is a distributed collaboration network.
 

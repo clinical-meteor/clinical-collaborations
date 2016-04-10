@@ -21,11 +21,11 @@ describe("clinical:collaborations - collaboration scenario", function () {
 
   it('publication/subscription works', function () {
     app.execute(function () {
-      if (typeof Studies === "undefined") {
-        var Studies = new Mongo.Collection('studies');
+      if (typeof Foos === "undefined") {
+        var Foos = new Mongo.Collection('foos');
       }
-      if (Studies.find().count() === 0) {
-        Studies.upsert({
+      if (Foos.find().count() === 0) {
+        Foos.upsert({
           _id: "neuroblastoma"
         }, {
           $set: {
@@ -45,15 +45,15 @@ describe("clinical:collaborations - collaboration scenario", function () {
           }
         });
       }
-      Meteor.publish('basicStudies', function () {
-        return Studies.find();
+      Meteor.publish('basicFoos', function () {
+        return Foos.find();
       });
     });
 
-    client.subscribe('basicStudies');
-    var studies = client.collection("studies");
-    expect(Object.keys(studies).length).to.equal(1);
-    expect(studies.neuroblastoma.name).to.equal("Nifty Neuroblastoma Study");
+    client.subscribe('basicFoos');
+    var foos = client.collection("foos");
+    expect(Object.keys(foos).length).to.equal(1);
+    expect(foos.neuroblastoma.name).to.equal("Nifty Neuroblastoma Study");
   });
 
   // //==================
